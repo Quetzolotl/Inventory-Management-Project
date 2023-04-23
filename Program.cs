@@ -2,46 +2,45 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+namespace Inventory_Management_Project
+{
+    public class Program
+    {
+        // Moved fields/properties to above the constructor
+        // Added access modifiers to all of the class level members (fields, properties, methods, etc)
+        // Formatted the doc to have proper nesting indentation
+        // Removed extra empty lines
 
-namespace Inventory_Management_Project{
- public class Program
- {
-        public Program() 
-        {
+        private string[] availableDifficulties = { "Easy", "Medium", "Hard", "Extreme" };
+        private string[] storeLocations = { "Main Menu", "Shop", "Inventory", "Exit" };
+        private string menuScreen = "";
+        private int usersMoney = 0;
+        private Random rnd = new Random();
 
-        }
-    [STAThread]
-   public static void Main(string[] args)
+        private User user = new User(0, null);
+
+        private ShopOwner shopOwner = new ShopOwner(40000, null);
+
+        private bool inGame = true;
+
+        // Why is this the only one that is static?
+        private static string json = File.ReadAllText("Data/npcInformation.json");
+
+        private JObject dialog = JObject.Parse(json);
+
+        private int[] StartMoney = { 1000, 750, 500, 250 };
+        private int startingMoneyNumber = 0;
+
+        private bool validDifficulty = false;
+
+        [STAThread]
+        public static void Main(string[] args)
         {
             Program program = new Program();
             program.ChooseDifficulty();
-        }   
+        }
 
-  
-        string[] availableDifficulties = { "Easy", "Medium", "Hard", "Extreme" };
-        string[] storeLocations = { "Main Menu", "Shop", "Inventory", "Exit" };
-        string menuScreen = "";
-        int usersMoney = 0;
-        Random rnd = new Random();
-
-
-        User user = new User(0, null);
-
-        ShopOwner shopOwner = new ShopOwner(40000, null);
-
-        bool inGame = true;
-
-         static string json = File.ReadAllText("Data/npcInformation.json");
-
-        JObject dialog = JObject.Parse(json);
-
-        int[] StartMoney = { 1000, 750, 500, 250 };
-        int startingMoneyNumber = 0;
-
-        bool validDifficulty = false;
-
-
-        void LoadMenu()
+        private void LoadMenu()
         {
             for (int i = 0; i < storeLocations.Length; i++)
             {
@@ -53,7 +52,7 @@ namespace Inventory_Management_Project{
             }
         }
 
-          void ChooseDifficulty()
+        private void ChooseDifficulty()
         {
             LoadMenu();
 
@@ -84,12 +83,10 @@ namespace Inventory_Management_Project{
                     Console.WriteLine("{0} is not a valid difficulty level.", difficultySelect);
                 }
             }
-
         }
 
-        void SetStartMoney(string startingDifficulty)
+        private void SetStartMoney(string startingDifficulty)
         {
-
             switch (startingDifficulty)
             {
                 case "Easy":
@@ -113,11 +110,10 @@ namespace Inventory_Management_Project{
             user.AddMoney(StartMoney[startingMoneyNumber]);
             Console.WriteLine($"Your adventure is just getting started! You have {user.Gold} gold pieces available.");
 
-            startGame();
+            StartGame();
         }
 
-
-        void startGame()
+        private void StartGame()
         {
             while (inGame)
             {
@@ -132,7 +128,6 @@ namespace Inventory_Management_Project{
                     return;
                 }
 
-
                 if (whereToGo == "Exit")
                 {
                     Console.WriteLine("Exiting...Progress not saved!");
@@ -145,29 +140,29 @@ namespace Inventory_Management_Project{
                     OpenShop();
 
                 }
-                else if(whereToGo == "Main Menu")
+                else if (whereToGo == "Main Menu")
                 {
-                MainMenu();
+                    MainMenu();
                 }
 
                 else if (whereToGo == "Inventory")
                 {
                     OpenInventory();
                 }
-
             }
         }
 
-        void MainMenu()
+        private void MainMenu()
         {
 
         }
 
-        void OpenInventory()
+        private void OpenInventory()
         {
 
         }
-        void OpenShop()
+
+        private void OpenShop()
         {
             //Console.WriteLine("Opening Shop");
 
@@ -187,9 +182,6 @@ namespace Inventory_Management_Project{
                     switch (userStoreSelect)
                     {
                         case "Buy":
-
-
-
                             shopOwner.OpenShop(user);
                             //perhaps write shop method here, but house most data in the shopowner file
 
@@ -222,14 +214,12 @@ namespace Inventory_Management_Project{
                         case "Exit":
                             shopOwner.Farewell();
                             break;
-
                     }
                 }
             }
         }
 
-
-         void UserBuysWeapon(string itemToBuy, int itemCost, int itemLeft)
+        private void UserBuysWeapon(string itemToBuy, int itemCost, int itemLeft)
         {
             //first check if the user has enough gold
             if (itemCost > user.Gold)
@@ -246,18 +236,6 @@ namespace Inventory_Management_Project{
                 Console.WriteLine($"Take good care of it! You now have {user.Gold} gold pieces.");
 
             }
-
-
         }
-
-
-
-
-   }
+    }
 }
-
-
-
-
-
-
