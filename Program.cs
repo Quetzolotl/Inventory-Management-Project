@@ -110,10 +110,10 @@ namespace Inventory_Management_Project
             user.AddMoney(StartMoney[startingMoneyNumber]);
             Console.WriteLine($"Your adventure is just getting started! You have {user.Gold} gold pieces available.");
 
-            startGame();
+            StartGame();
         }
 
-        private void startGame()
+        private void StartGame()
         {
             while (inGame)
             {
