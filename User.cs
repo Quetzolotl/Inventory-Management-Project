@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace Inventory_Management_Project
 {
     public class User
-
     {
-        public int Gold { get; set; }
+        public int Gold { get; set; } // Might consider setting these to have private setters
         public Weapon? Weapon { get; set; } 
 
         public User(int gold,  Weapon? weapon)
@@ -41,8 +40,7 @@ namespace Inventory_Management_Project
 
         public void RemoveWeapon(Weapon weapon)
         {
-            Weapon = null;
-            
+            Weapon = null;            
         }
     }
 }
