@@ -4,237 +4,162 @@ using Newtonsoft.Json.Linq;
 
 namespace Inventory_Management_Project
 {
+    // Added static to all of the class members to avoid the need to initialize an instance of this same class
     public class Program
     {
-        // Moved fields/properties to above the constructor
-        // Added access modifiers to all of the class level members (fields, properties, methods, etc)
-        // Formatted the doc to have proper nesting indentation
-        // Removed extra empty lines
+        // Encapsulate the information that is needed for the difficulties
+        // This prevents the mismatching of data because you only have to find it once
+        private static readonly DifficultyLevel[] difficulties =
+        {
+            new DifficultyLevel("Easy", 1000),
+            new DifficultyLevel("Medium", 750),
+            new DifficultyLevel("Hard", 500),
+            new DifficultyLevel("Extreme", 200),
+        };
 
-        private string[] availableDifficulties = { "Easy", "Medium", "Hard", "Extreme" };
-        private string[] storeLocations = { "Main Menu", "Shop", "Inventory", "Exit" };
-        private string menuScreen = "";
-        private int usersMoney = 0;
-        private Random rnd = new Random();
+        private static readonly string[] mainMenuOptions = { "Main Menu", "Shop", "Inventory", "Exit" };
+        private static readonly string[] shopMenuOptions = { "Buy", "Sell", "Quest", "Exit" };
 
-        private User user = new User(0, null);
+        private static readonly Random random = new Random();
 
-        private ShopOwner shopOwner = new ShopOwner(40000, null);
+        private static readonly User user = new User(0, null);
+        private static readonly ShopOwner shopOwner = new ShopOwner(40000, null);
+        private static JObject dialog;
 
-        private bool inGame = true;
-
-        // Why is this the only one that is static?
-        private static string json = File.ReadAllText("Data/npcInformation.json");
-
-        private JObject dialog = JObject.Parse(json);
-
-        private int[] StartMoney = { 1000, 750, 500, 250 };
-        private int startingMoneyNumber = 0;
-
-        private bool validDifficulty = false;
 
         [STAThread]
         public static void Main(string[] args)
         {
-            Program program = new Program();
-            program.ChooseDifficulty();
+            // The json is not used anywhere else, so it doesn't need to be a class level member
+            // Variables should be scoped to just where they are needed
+            var dialogJson = File.ReadAllText("Data/npcInformation.json");
+            dialog = JObject.Parse(dialogJson);
+
+            // The actual game functinality should be extracted into it's own class
+            // This keeps the Program class clean and only responsible for starting the game
+            // However, for the sake of the PR, I'm leaving it in the Program class
+            ChooseDifficulty();
         }
 
-        private void LoadMenu()
+        private static void ChooseDifficulty()
         {
-            for (int i = 0; i < storeLocations.Length; i++)
-            {
-                menuScreen += storeLocations[i];
-                if (i < storeLocations.Length - 1)
-                {
-                    menuScreen += ", ";
-                }
-            }
-        }
-
-        private void ChooseDifficulty()
-        {
-            LoadMenu();
-
-            while (!validDifficulty)
+            var isValidDifficulty = false;
+            while (!isValidDifficulty)
             {
                 Console.Write("Welcome to Tal's Emperioum. Please select the difficutly. Easy, Medium, Hard, or Extreme. ->");
 
-                string? difficultySelect = Console.ReadLine().Trim();
+                // The input selection can be cleaned up some
+                // By doing the "?? string.Empty" we can avoid getting a null reference and makes future checks easier
+                var userInput = Console.ReadLine()?.Trim() ?? string.Empty;
 
-                string? firstLetterUpperDifficultySelect = char.ToUpper(difficultySelect[0]) + difficultySelect.Substring(1);
+                // We can also use LINQ to make it easier to understand what is going on
+                // We can also normalize the whole string by calling ToLower() or ToUpper() on it
+                // This is easier to read and fixes a bug where if the user type eXit/EXIT/ExIt it would previously fail
+                var matchingDifficulty = difficulties.FirstOrDefault(d => d.Label.ToLower() == userInput.ToLower());
 
-                if (Array.IndexOf(availableDifficulties, firstLetterUpperDifficultySelect) != -1)
+                if (matchingDifficulty != null)
                 {
                     // User input is a valid difficulty level
-                    Console.WriteLine("You have selected {0} difficulty level.", firstLetterUpperDifficultySelect);
-                    validDifficulty = true;
+                    Console.WriteLine("You have selected {0} difficulty level.", matchingDifficulty.Label);
+                    isValidDifficulty = true;
 
-                    if (firstLetterUpperDifficultySelect == null)
-                    {
-                        Console.WriteLine("Starting difficulty is null.");
-                        return;
-                    }
-                    SetStartMoney(firstLetterUpperDifficultySelect);
+                    SetStartMoney(matchingDifficulty.StartingGold);
                 }
                 else
                 {
                     // User input is not a valid difficulty level
-                    Console.WriteLine("{0} is not a valid difficulty level.", difficultySelect);
+                    Console.WriteLine("{0} is not a valid difficulty level.", userInput);
                 }
             }
         }
 
-        private void SetStartMoney(string startingDifficulty)
+        private static void SetStartMoney(int startingGold)
         {
-            switch (startingDifficulty)
-            {
-                case "Easy":
-                    startingMoneyNumber = 0;
+            user.AddMoney(startingGold);
 
-                    break;
-
-                case "Medium":
-                    startingMoneyNumber = 1;
-                    break;
-
-                case "Hard":
-                    startingMoneyNumber = 2;
-                    break;
-
-                case "Extreme":
-                    startingMoneyNumber = 3;
-                    break;
-            }
-
-            user.AddMoney(StartMoney[startingMoneyNumber]);
+            // The things below here are not the responsibility of the SetStartMoney method
+            // If you were to call this from another place (like a reset) it may be unexpected to tell the player they are just getting started
             Console.WriteLine($"Your adventure is just getting started! You have {user.Gold} gold pieces available.");
 
-            startGame();
+            StartGame();
         }
 
-        private void startGame()
+        private static void StartGame()
         {
-            while (inGame)
+            // Moved inGame variable into the same scope it is used
+            var isInGame = true;
+            while (isInGame)
             {
-                Console.Write($"Where would you like to go? {menuScreen} ->");
+                Console.Write($"Where would you like to go? {string.Join(", ", mainMenuOptions)} ->");
 
-                string? whereToGo = Console.ReadLine().Trim();
-                whereToGo = char.ToUpper(whereToGo[0]) + whereToGo.Substring(1);
+                var userInput = Console.ReadLine()?.Trim() ?? string.Empty;
+                userInput = userInput.ToLower();
 
-                if (whereToGo == null)
+                // Changed to a switch to improve readability and also handle invalid input better
+                switch (userInput)
                 {
-                    Console.WriteLine("Selection is null.");
-                    return;
-                }
-
-                if (whereToGo == "Exit")
-                {
-                    Console.WriteLine("Exiting...Progress not saved!");
-                    inGame = false; break;
-
-                }
-                else if (whereToGo == "Shop")
-                {
-                    // Console.WriteLine($"Should be opening shop ---------> {whereToGo}");
-                    OpenShop();
-
-                }
-                else if (whereToGo == "Main Menu")
-                {
-                    MainMenu();
-                }
-
-                else if (whereToGo == "Inventory")
-                {
-                    OpenInventory();
+                    case "exit":
+                        Console.WriteLine("Exiting...Progress not saved!");
+                        isInGame = false;
+                        break;
+                    case "shop":
+                        OpenShop();
+                        break;
+                    case "main menu":
+                        OpenMainMenu();
+                        break;
+                    case "inventory":
+                        OpenInventory();
+                        break;
+                    default:
+                        Console.WriteLine("That was an invalid command");
+                        break;
                 }
             }
         }
 
-        private void MainMenu()
+        // Renamed to match the pattern of the other options
+        private static void OpenMainMenu()
         {
 
         }
 
-        private void OpenInventory()
+        private static void OpenInventory()
         {
 
         }
 
-        private void OpenShop()
+        private static void OpenShop()
         {
-            //Console.WriteLine("Opening Shop");
+            // This dialog stuff could be encapsulated into its own service
+            // That would allow a developer to just call something like dialogService.GetRandomDialog("blacksmith:greetings", "Hello!") or similar
+            // Added Index to the name, since it is not the actual random greeting
+            var randomGreetingIndex = random.Next(0, 2);
+            // Added a default greeting in case the dialog chain is incorrect/missing
+            var greeting = dialog["blacksmith"]?["greetings"]?[randomGreetingIndex]?.ToString() ?? "Hello!";
 
-            int randomGreeting = rnd.Next(0, 2);
-            // Get the greeting for the shop owner
-            string? greeting = dialog["blacksmith"]?["greetings"]?[randomGreeting]?.ToString();
+            Console.WriteLine($"{greeting}");
+            
+            // Made this dynamic, though ultimately you would want to unify how all of the menus are displayed
+            Console.WriteLine(" >" + string.Join($"{Environment.NewLine} >", shopMenuOptions));
 
-            if (greeting != null)
+            var userInput = Console.ReadLine()?.Trim() ?? string.Empty;
+            userInput = userInput.ToLower();
+
+            switch (userInput)
             {
-                Console.WriteLine($"{greeting}");
-                Console.WriteLine("\r\n >Buy \r\n >Sell \r\n >Quest \r\n >Exit");
-                string? userStoreSelect = Console.ReadLine()?.Trim();
-                userStoreSelect = char.ToUpper(userStoreSelect[0]) + userStoreSelect.Substring(1);
-
-                if (userStoreSelect != null)
-                {
-                    switch (userStoreSelect)
-                    {
-                        case "Buy":
-                            shopOwner.OpenShop(user);
-                            //perhaps write shop method here, but house most data in the shopowner file
-
-                            Console.WriteLine("\r\nDoes anything look good to you? Type a number 1-14 to select the item and it's information, otherwise, type 'Back'");
-
-                            //string? inShop = Console.ReadLine().ToUpper().Trim();
-                            //int itemSelect;
-                            //if (int.TryParse(inShop, out itemSelect))
-                            //{
-
-
-                            //    Console.WriteLine($"Ah! you have a good eye! {items[itemSelect].Name} is a beautiful blade.\r\nI've got {items[itemSelect].Quantity} in stock, and it's yours for the price of {items[itemSelect].Price} gold pieces.");
-                            //    Console.WriteLine("Does it suit your fancy?");
-                            //    string? userBuys = Console.ReadLine().Trim().ToUpper();
-
-
-
-                            //    if (userBuys == "Yes")
-                            //    {
-                            //        //Weapon selectedItem = shopOwner[itemSele];
-
-                            //       // break;
-                            //    }
-                            //}
-                            break;
-                        case "Sell":
-                            shopOwner.SellWeapon(); break;
-                        case "Quest":
-                            shopOwner.OpenQuests(); break;
-                        case "Exit":
-                            shopOwner.Farewell();
-                            break;
-                    }
-                }
-            }
-        }
-
-        private void UserBuysWeapon(string itemToBuy, int itemCost, int itemLeft)
-        {
-            //first check if the user has enough gold
-            if (itemCost > user.Gold)
-            {
-                Console.WriteLine("Sorry, friend. You don't have enough coin. I have other weapons that you could look at.");
-
-            }
-            else
-            {
-                user.RemoveMoney(itemCost);
-
-                itemLeft--;
-                // Console.WriteLine($"<------------------item: {itemToBuy} and left: {itemLeft}------->");
-                Console.WriteLine($"Take good care of it! You now have {user.Gold} gold pieces.");
-
+                case "buy":
+                    shopOwner.SellWeaponToUser(user);
+                    break;
+                case "sell":
+                    shopOwner.BuyWeaponFromUser(); // Should take user but is not implemented yet
+                    break;
+                case "quest":
+                    shopOwner.DisplayQuests();
+                    break;
+                case "exit":
+                    shopOwner.BidFarewellToUser();
+                    break;
             }
         }
     }
