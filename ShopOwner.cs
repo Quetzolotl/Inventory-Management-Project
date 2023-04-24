@@ -117,6 +117,13 @@ namespace Inventory_Management_Project
                             BidFarewellToUser();
                         }
                     }
+                    else // This fixes the infinite loop if they decline the purhcase
+                    {
+                        // This whole method should probably be reworked to loop back to the Shop if they decline
+                        // Right now, they select No and it kicks them back to the main menu
+                        // It should just kick them back to the item list
+                        shouldCloseShop = true;
+                    }
                 }
             }
             else
