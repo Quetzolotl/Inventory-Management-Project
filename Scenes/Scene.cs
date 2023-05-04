@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Inventory_Management_Project.Core;
 
 namespace Inventory_Management_Project.Scenes
 {

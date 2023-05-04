@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventory_Management_Project
+namespace Inventory_Management_Project.Core
 {
     public class DifficultyLevel
     {

@@ -53,10 +53,5 @@ namespace Inventory_Management_Project.Scenes
 
             _scenes.Add(scene.GetType(), scene);
         }
-
-        public void AddScene<TScene>() where TScene : Scene, new()
-        {
-            AddScene(new TScene());
-        }
     }
 }

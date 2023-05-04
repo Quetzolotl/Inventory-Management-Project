@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Inventory_Management_Project.Core;
 
 namespace Inventory_Management_Project.Scenes
 {
@@ -15,11 +16,14 @@ namespace Inventory_Management_Project.Scenes
 
         public override void Draw()
         {
-            Console.Clear();
+            _displayManager.Clear();
 
-            Console.WriteLine("Hello World!!");
+            _displayManager.DisplayMessage("Hello World!!");
+            _displayManager.DisplayInfo("Hello World!!");
+            _displayManager.DisplayWarning("Hello World!!");
+            _displayManager.DisplayError("Hello World!!");
 
-            Console.ReadLine();
+            _displayManager.WaitForAnyInput();
         }
     }
 }

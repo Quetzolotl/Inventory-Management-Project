@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Inventory_Management_Project
+﻿namespace Inventory_Management_Project.Core
 {
     public sealed class DisplayManager
     {
@@ -15,8 +9,28 @@ namespace Inventory_Management_Project
 
         public void DisplayMessage(string message, bool hasNewLine = true)
         {
+            DisplayMessage(message, hasNewLine, ConsoleColor.Gray);
+        }
+
+        public void DisplayWarning(string message, bool hasNewLine = true)
+        {
+            DisplayMessage(message, hasNewLine, ConsoleColor.Yellow);
+        }
+
+        public void DisplayError(string message, bool hasNewLine = true)
+        {
+            DisplayMessage(message, hasNewLine, ConsoleColor.Red);
+        }
+
+        public void DisplayInfo(string message, bool hasNewLine = true)
+        {
+            DisplayMessage(message, hasNewLine, ConsoleColor.Cyan);
+        }
+
+        private void DisplayMessage(string message, bool hasNewLine, ConsoleColor messageColor)
+        {
             var originalColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = messageColor;
 
             if (hasNewLine)
             {
@@ -26,6 +40,13 @@ namespace Inventory_Management_Project
             {
                 Console.Write(message);
             }
+
+            Console.ForegroundColor = originalColor;
+        }
+
+        public void WaitForAnyInput()
+        {
+            Console.ReadKey();
         }
 
         public string? GetInput()

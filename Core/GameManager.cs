@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventory_Management_Project
+namespace Inventory_Management_Project.Core
 {
     public class GameManager
     {
-        private readonly Type _defaultSceneType = typeof(MainMenuScene);
-
         private readonly SceneManager _sceneManager;
+        private readonly DisplayManager _displayManager;
 
         private bool isInGame = false;
 
-        public GameManager(SceneManager sceneManager)
+        public GameManager(SceneManager sceneManager, DisplayManager displayManager)
         {
             _sceneManager = sceneManager;
+            _displayManager = displayManager;
             _sceneManager.OnExitGameRequest += OnExitGameRequested;
             InitializeScenes(_sceneManager);
         }
@@ -34,9 +34,9 @@ namespace Inventory_Management_Project
             }
         }
 
-        private static void InitializeScenes(SceneManager _sceneManager)
+        private void InitializeScenes(SceneManager _sceneManager)
         {
-            _sceneManager.AddScene<MainMenuScene>();
+            _sceneManager.AddScene(new MainMenuScene(_displayManager));
         }
 
         private void OnExitGameRequested()
