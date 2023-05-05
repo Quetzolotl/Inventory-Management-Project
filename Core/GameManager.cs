@@ -35,10 +35,5 @@ namespace Inventory_Management_Project.Core
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopMainScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopSellToPlayerScene>());
         }
-
-        private void OnExitGameRequested()
-        {
-            Environment.Exit(0);
-        }
     }
 }
