@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Scenes;
+using Inventory_Management_Project.Scenes.Shop;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,8 @@ namespace Inventory_Management_Project.Core
         {
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<IntroScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<MainMenuScene>());
-            _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopScene>());
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopMainScene>());
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopSellToPlayerScene>());
         }
 
         private void OnExitGameRequested()

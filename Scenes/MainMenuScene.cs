@@ -1,5 +1,6 @@
 ﻿using Inventory_Management_Project.Core;
 using Inventory_Management_Project.Core.Menus;
+using Inventory_Management_Project.Scenes.Shop;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory_Management_Project.Scenes
@@ -8,7 +9,7 @@ namespace Inventory_Management_Project.Scenes
     {
         private readonly List<SceneMenuOption> _menuOptions = new List<SceneMenuOption>
         {
-            new SceneMenuOption("Shop", typeof(ShopScene))
+            new SceneMenuOption("Shop", typeof(ShopMainScene))
         };
 
         public MainMenuScene(SceneManager sceneManager, DisplayManager displayManager) : base(sceneManager, displayManager)

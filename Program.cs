@@ -1,6 +1,7 @@
 ﻿
 using Inventory_Management_Project.Core;
 using Inventory_Management_Project.Scenes;
+using Inventory_Management_Project.Scenes.Shop;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -27,7 +28,8 @@ namespace Inventory_Management_Project
 
             serviceCollection.AddTransient<IntroScene>();
             serviceCollection.AddTransient<MainMenuScene>();
-            serviceCollection.AddTransient<ShopScene>();
+            serviceCollection.AddTransient<ShopMainScene>();
+            serviceCollection.AddTransient<ShopSellToPlayerScene>();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
