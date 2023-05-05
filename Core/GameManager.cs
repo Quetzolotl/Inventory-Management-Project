@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Inventory_Management_Project.Core
 {
-    public class GameManager
+    public sealed class GameManager
     {
         private readonly SceneManager _sceneManager;
         private readonly DisplayManager _displayManager;
@@ -32,6 +32,7 @@ namespace Inventory_Management_Project.Core
         {
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<IntroScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<MainMenuScene>());
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopScene>());
         }
 
         private void OnExitGameRequested()

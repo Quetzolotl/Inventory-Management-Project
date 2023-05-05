@@ -27,6 +27,7 @@ namespace Inventory_Management_Project
 
             serviceCollection.AddTransient<IntroScene>();
             serviceCollection.AddTransient<MainMenuScene>();
+            serviceCollection.AddTransient<ShopScene>();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 

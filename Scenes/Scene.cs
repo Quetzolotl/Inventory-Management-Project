@@ -18,6 +18,9 @@ namespace Inventory_Management_Project.Scenes
             _displayManager = displayManager;
         }
 
-        public abstract void Draw();
+        public virtual void Draw()
+        {
+            _displayManager.Clear();
+        }
     }
 }

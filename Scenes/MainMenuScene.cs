@@ -1,9 +1,15 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Menus;
+using Microsoft.Extensions.Logging;
 
 namespace Inventory_Management_Project.Scenes
 {
-    public class MainMenuScene : Scene
+    public sealed class MainMenuScene : Scene
     {
+        private readonly List<SceneMenuOption> _menuOptions = new List<SceneMenuOption>
+        {
+            new SceneMenuOption("Shop", typeof(ShopScene))
+        };
 
         public MainMenuScene(SceneManager sceneManager, DisplayManager displayManager) : base(sceneManager, displayManager)
         {
@@ -12,11 +18,11 @@ namespace Inventory_Management_Project.Scenes
 
         public override void Draw()
         {
-            _displayManager.Clear();
+            base.Draw();
 
-            _displayManager.DisplayWarning("Not implemented");
+            var selectedOption = _displayManager.GetMenuOptionFromPlayer("Where would you like to go?", _menuOptions);
 
-            _displayManager.WaitForAnyInputFromPlayer(true);
+            _sceneManager.ChangeScene(selectedOption.SceneType);
         }
     }
 }

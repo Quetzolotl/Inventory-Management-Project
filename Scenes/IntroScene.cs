@@ -20,7 +20,7 @@ namespace Inventory_Management_Project.Scenes
 
         public override void Draw()
         {
-            _displayManager.Clear();
+            base.Draw();
 
             _displayManager.DisplayMessage("Welcome to Kiu's Emporium!");
 
