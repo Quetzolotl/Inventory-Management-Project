@@ -1,4 +1,6 @@
-﻿namespace Inventory_Management_Project.Core
+﻿using Inventory_Management_Project.Core.Menus;
+
+namespace Inventory_Management_Project.Core
 {
     public sealed class DisplayManager
     {
@@ -44,23 +46,34 @@
             Console.ForegroundColor = originalColor;
         }
 
-        public void WaitForAnyInput()
+        public void WaitForAnyInputFromPlayer(bool showMessage = false, string message = "")
         {
+            if (showMessage)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    message = "Please press any key to continue...";
+                }
+
+                DisplayMessage(message);
+            }
+
             Console.ReadKey();
         }
 
-        public string? GetInput()
+        public string? GetInputFromPlayer()
         {
             return Console.ReadLine();
         }
 
-        public string GetValidInput(IEnumerable<string> validInputs, bool shouldNormalize = true, string invlidInputMessage = "")
+        public string GetValidInputFromPlayer(IEnumerable<string> validInputs, bool shouldNormalize = true, string invalidInputMessage = "")
         {
             var isInputValid = false;
+            var input = string.Empty;
 
             do
             {
-                var input = GetInput();
+                input = GetInputFromPlayer();
 
                 if (input == null)
                 {
@@ -78,12 +91,49 @@
                     }
                 }
 
-                if (!isInputValid && !string.IsNullOrWhiteSpace(invlidInputMessage))
+                if (!isInputValid && !string.IsNullOrWhiteSpace(invalidInputMessage))
                 {
+                    if (invalidInputMessage.Contains("{0}"))
+                    {
+                        invalidInputMessage = string.Format(invalidInputMessage, input);
+                    }
 
+                    DisplayError(invalidInputMessage);
                 }
             }
-            while (true);
+            while (!isInputValid);
+
+            return input ?? string.Empty;
+        }
+
+        public TOption GetMenuOptionFromPlayer<TOption>(string menuTitle, IEnumerable<TOption> menuOptions) where TOption : IMenuOption
+        {
+            DisplayMessage(menuTitle);
+
+            var optionId = 0;
+            var validOptions = new Dictionary<string, TOption>();
+
+            foreach (var menuOption in menuOptions)
+            {
+                optionId++;
+                validOptions.Add(optionId.ToString(), menuOption);
+
+                DisplayMessage($"{optionId}: {menuOption.Label}");
+            }
+
+            var playerInput = GetValidInputFromPlayer(validOptions.Keys, true, "{0} is not a valid menu option. Please select another");
+
+            return validOptions[playerInput];
+        }
+
+
+        public string GetMenuOptionFromPlayer(string menuTitle, IEnumerable<string> menuOptions)
+        {
+            var options = menuOptions.Select(m => new GenericMenuOption(m));
+
+            var playerInput = GetMenuOptionFromPlayer(menuTitle, options);
+
+            return playerInput.Label;
         }
     }
 }

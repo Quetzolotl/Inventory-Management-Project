@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Inventory_Management_Project.Core;
+﻿using Inventory_Management_Project.Core;
 
 namespace Inventory_Management_Project.Scenes
 {
-    public sealed class MainMenuScene : Scene
+    public class MainMenuScene : Scene
     {
-        public MainMenuScene(DisplayManager displayManager) : base("Main Menu", displayManager)
+
+        public MainMenuScene(SceneManager sceneManager, DisplayManager displayManager) : base(sceneManager, displayManager)
         {
 
         }
@@ -18,12 +14,9 @@ namespace Inventory_Management_Project.Scenes
         {
             _displayManager.Clear();
 
-            _displayManager.DisplayMessage("Hello World!!");
-            _displayManager.DisplayInfo("Hello World!!");
-            _displayManager.DisplayWarning("Hello World!!");
-            _displayManager.DisplayError("Hello World!!");
+            _displayManager.DisplayWarning("Not implemented");
 
-            _displayManager.WaitForAnyInput();
+            _displayManager.WaitForAnyInputFromPlayer(true);
         }
     }
 }

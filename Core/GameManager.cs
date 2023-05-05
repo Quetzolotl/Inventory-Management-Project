@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Scenes;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,37 +12,32 @@ namespace Inventory_Management_Project.Core
     {
         private readonly SceneManager _sceneManager;
         private readonly DisplayManager _displayManager;
+        private readonly IServiceProvider _serviceProvider;
 
-        private bool isInGame = false;
-
-        public GameManager(SceneManager sceneManager, DisplayManager displayManager)
+        public GameManager(SceneManager sceneManager, DisplayManager displayManager, IServiceProvider serviceProvider)
         {
             _sceneManager = sceneManager;
             _displayManager = displayManager;
+            _serviceProvider = serviceProvider;
+
             _sceneManager.OnExitGameRequest += OnExitGameRequested;
-            InitializeScenes(_sceneManager);
+            InitializeScenes();
         }
 
         public void Start()
         {
-            _sceneManager.ChangeScene<MainMenuScene>();
-
-            isInGame = true;
-
-            while (isInGame)
-            {
-                _sceneManager.DrawCurrentScene();
-            }
+            _sceneManager.ChangeScene<IntroScene>();
         }
 
-        private void InitializeScenes(SceneManager _sceneManager)
+        private void InitializeScenes()
         {
-            _sceneManager.AddScene(new MainMenuScene(_displayManager));
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<IntroScene>());
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<MainMenuScene>());
         }
 
         private void OnExitGameRequested()
         {
-            isInGame = false;
+            Environment.Exit(0);
         }
     }
 }

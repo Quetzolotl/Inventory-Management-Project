@@ -25,6 +25,9 @@ namespace Inventory_Management_Project
             serviceCollection.AddSingleton<SceneManager>();
             serviceCollection.AddSingleton<DisplayManager>();
 
+            serviceCollection.AddTransient<IntroScene>();
+            serviceCollection.AddTransient<MainMenuScene>();
+
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             return serviceProvider;

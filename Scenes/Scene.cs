@@ -9,16 +9,14 @@ namespace Inventory_Management_Project.Scenes
 {
     public abstract class Scene
     {
+        protected readonly SceneManager _sceneManager;
         protected readonly DisplayManager _displayManager;
 
         public event Action? OnExitGameRequest;
 
-        public string Name { get; }
-
-        public Scene(string name, DisplayManager displayManager)
+        public Scene(SceneManager sceneManager, DisplayManager displayManager)
         {
-            Name = name;
-
+            _sceneManager = sceneManager;
             _displayManager = displayManager;
         }
 

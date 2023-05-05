@@ -31,6 +31,8 @@ namespace Inventory_Management_Project.Scenes
 
             _currentScene = newScene;
             _currentScene.OnExitGameRequest += OnExitGameRequested;
+
+            _currentScene.Draw();
         }
 
         public void DrawCurrentScene()
