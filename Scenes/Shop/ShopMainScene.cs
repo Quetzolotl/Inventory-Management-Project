@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Managers;
 using Inventory_Management_Project.Core.Menus;
 using System;
 using System.Collections.Generic;

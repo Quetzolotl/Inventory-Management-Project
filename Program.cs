@@ -1,5 +1,6 @@
 ﻿
 using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Managers;
 using Inventory_Management_Project.Scenes;
 using Inventory_Management_Project.Scenes.Shop;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,7 @@ namespace Inventory_Management_Project
             serviceCollection.AddSingleton<SceneManager>();
 
             serviceCollection.AddTransient<DisplayManager>();
-            serviceCollection.AddTransient<IDataService, FileSystemDataService>();
+            serviceCollection.AddTransient<IDataManager, FileSystemDataManager>();
 
             serviceCollection.AddSingleton<Player>();
 

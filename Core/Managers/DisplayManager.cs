@@ -1,6 +1,6 @@
 ﻿using Inventory_Management_Project.Core.Menus;
 
-namespace Inventory_Management_Project.Core
+namespace Inventory_Management_Project.Core.Managers
 {
     public sealed class DisplayManager
     {

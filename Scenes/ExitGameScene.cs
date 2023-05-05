@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

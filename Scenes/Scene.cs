@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Managers;
 
 namespace Inventory_Management_Project.Scenes
 {

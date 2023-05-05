@@ -5,9 +5,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Inventory_Management_Project.Core
+namespace Inventory_Management_Project.Core.Managers
 {
-    public class FileSystemDataService : IDataService
+    public class FileSystemDataManager : IDataManager
     {
         private const string DataFolderName = "Data";
 
@@ -15,7 +15,7 @@ namespace Inventory_Management_Project.Core
         private readonly JsonSerializerOptions _jsonSerializerOptions;
         private readonly string _dataFolderPath;
 
-        public FileSystemDataService()
+        public FileSystemDataManager()
         {
             _dataFolderPath = Path.Combine(Directory.GetCurrentDirectory(), DataFolderName);
             _jsonSerializerOptions = new JsonSerializerOptions

@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Managers;
 
 namespace Inventory_Management_Project.Scenes.Shop
 {

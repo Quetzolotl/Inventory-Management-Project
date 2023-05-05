@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventory_Management_Project.Core
+namespace Inventory_Management_Project.Core.Managers
 {
-    public interface IDataService
+    public interface IDataManager
     {
         TData? LoadData<TData>(string dataName);
     }

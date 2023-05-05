@@ -7,16 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventory_Management_Project.Core
+namespace Inventory_Management_Project.Core.Managers
 {
     public sealed class GameManager
     {
         private readonly SceneManager _sceneManager;
+        private readonly DisplayManager _displayManager;
         private readonly IServiceProvider _serviceProvider;
 
-        public GameManager(SceneManager sceneManager, IServiceProvider serviceProvider)
+        public GameManager(SceneManager sceneManager, DisplayManager displayManager, IServiceProvider serviceProvider)
         {
             _sceneManager = sceneManager;
+            _displayManager = displayManager;
             _serviceProvider = serviceProvider;
 
             InitializeScenes();

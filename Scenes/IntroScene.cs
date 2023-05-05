@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Managers;
 using Inventory_Management_Project.Core.Menus;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace Inventory_Management_Project.Scenes
     {
         private readonly IEnumerable<GenericDataMenuOption<Difficulty>> _difficultyMenuOptions;
 
-        public IntroScene(Player player, SceneManager sceneManager, DisplayManager displayManager, IDataService dataService) : base(player, sceneManager, displayManager)
+        public IntroScene(Player player, SceneManager sceneManager, DisplayManager displayManager, IDataManager dataService) : base(player, sceneManager, displayManager)
         {
             var difficulties = dataService.LoadData<IEnumerable<Difficulty>>("difficulties");
 
