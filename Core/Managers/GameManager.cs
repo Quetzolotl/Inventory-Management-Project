@@ -26,7 +26,22 @@ namespace Inventory_Management_Project.Core.Managers
 
         public void Start()
         {
-            _sceneManager.ChangeScene<IntroScene>();
+            try
+            {
+                _sceneManager.ChangeScene<IntroScene>();
+            }
+            catch (Exception ex)
+            {
+                _displayManager.DisplayError($"There was an unexpected problem. {ex.Message}");
+
+                var playerInput = _displayManager.GetMenuOptionFromPlayer("Would you like more info?", new[] { "Yes", "No" });
+
+                if (playerInput == "Yes")
+                {
+                    _displayManager.DisplayError(ex.StackTrace ?? "No additional info");
+                    _displayManager.WaitForAnyInputFromPlayer();
+                }
+            }
         }
 
         private void InitializeScenes()
