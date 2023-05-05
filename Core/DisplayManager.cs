@@ -51,7 +51,7 @@ namespace Inventory_Management_Project.Core
             Console.ForegroundColor = originalColor;
         }
 
-        public void WaitForAnyInputFromPlayer(bool showMessage = false, string message = "")
+        public void WaitForAnyInputFromPlayer(bool showMessage = true, string message = "")
         {
             if (showMessage)
             {

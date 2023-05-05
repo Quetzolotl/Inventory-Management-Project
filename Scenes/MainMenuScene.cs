@@ -9,7 +9,8 @@ namespace Inventory_Management_Project.Scenes
     {
         private readonly List<SceneMenuOption> _menuOptions = new List<SceneMenuOption>
         {
-            new SceneMenuOption("Shop", typeof(ShopMainScene))
+            new SceneMenuOption("Shop", typeof(ShopMainScene)),
+            new SceneMenuOption("Exit", typeof(ExitGameScene))
         };
 
         public MainMenuScene(Player player, SceneManager sceneManager, DisplayManager displayManager) : base(player, sceneManager, displayManager)

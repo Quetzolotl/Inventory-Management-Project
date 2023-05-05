@@ -29,6 +29,7 @@ namespace Inventory_Management_Project
             serviceCollection.AddSingleton<Player>();
 
             // Scenes - This should also be registered in the Game Manager
+            serviceCollection.AddSingleton<ExitGameScene>();
             serviceCollection.AddSingleton<IntroScene>();
             serviceCollection.AddSingleton<MainMenuScene>();
             serviceCollection.AddSingleton<ShopMainScene>();

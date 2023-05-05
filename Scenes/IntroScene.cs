@@ -37,7 +37,7 @@ namespace Inventory_Management_Project.Scenes
 
             _player.AddGold(selectedDifficulty.StartingGold);
 
-            _displayManager.WaitForAnyInputFromPlayer(true);
+            _displayManager.WaitForAnyInputFromPlayer();
 
             _sceneManager.ChangeScene<MainMenuScene>();
         }

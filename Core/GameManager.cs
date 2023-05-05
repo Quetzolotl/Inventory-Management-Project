@@ -29,6 +29,7 @@ namespace Inventory_Management_Project.Core
 
         private void InitializeScenes()
         {
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<ExitGameScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<IntroScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<MainMenuScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopMainScene>());

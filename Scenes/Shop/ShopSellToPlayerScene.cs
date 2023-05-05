@@ -14,7 +14,7 @@ namespace Inventory_Management_Project.Scenes.Shop
 
             _displayManager.DisplayWarning("Not Implemented");
 
-            _displayManager.WaitForAnyInputFromPlayer(true);
+            _displayManager.WaitForAnyInputFromPlayer();
         }
     }
 }
