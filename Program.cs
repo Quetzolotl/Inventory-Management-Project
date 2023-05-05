@@ -22,14 +22,17 @@ namespace Inventory_Management_Project
         {
             var serviceCollection = new ServiceCollection();
 
+            // Core
             serviceCollection.AddSingleton<GameManager>();
             serviceCollection.AddSingleton<SceneManager>();
             serviceCollection.AddSingleton<DisplayManager>();
+            serviceCollection.AddSingleton<Player>();
 
-            serviceCollection.AddTransient<IntroScene>();
-            serviceCollection.AddTransient<MainMenuScene>();
-            serviceCollection.AddTransient<ShopMainScene>();
-            serviceCollection.AddTransient<ShopSellToPlayerScene>();
+            // Scenes - This should also be registered in the Game Manager
+            serviceCollection.AddSingleton<IntroScene>();
+            serviceCollection.AddSingleton<MainMenuScene>();
+            serviceCollection.AddSingleton<ShopMainScene>();
+            serviceCollection.AddSingleton<ShopSellToPlayerScene>();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 

@@ -12,13 +12,11 @@ namespace Inventory_Management_Project.Core
     public sealed class GameManager
     {
         private readonly SceneManager _sceneManager;
-        private readonly DisplayManager _displayManager;
         private readonly IServiceProvider _serviceProvider;
 
-        public GameManager(SceneManager sceneManager, DisplayManager displayManager, IServiceProvider serviceProvider)
+        public GameManager(SceneManager sceneManager, IServiceProvider serviceProvider)
         {
             _sceneManager = sceneManager;
-            _displayManager = displayManager;
             _serviceProvider = serviceProvider;
 
             InitializeScenes();

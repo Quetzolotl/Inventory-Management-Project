@@ -9,11 +9,13 @@ namespace Inventory_Management_Project.Scenes
 {
     public abstract class Scene
     {
+        protected readonly Player _player;
         protected readonly SceneManager _sceneManager;
         protected readonly DisplayManager _displayManager;
 
-        public Scene(SceneManager sceneManager, DisplayManager displayManager)
+        public Scene(Player player, SceneManager sceneManager, DisplayManager displayManager)
         {
+            _player = player;
             _sceneManager = sceneManager;
             _displayManager = displayManager;
         }

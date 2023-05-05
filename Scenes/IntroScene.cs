@@ -7,13 +7,13 @@ namespace Inventory_Management_Project.Scenes
     {
         private readonly List<DifficultyLevel> difficulties = new List<DifficultyLevel>
         {
-            new DifficultyLevel("Easy", 1000),
-            new DifficultyLevel("Medium", 750),
-            new DifficultyLevel("Hard", 500),
-            new DifficultyLevel("Extreme", 250),
+            new DifficultyLevel("Easy Peasy ", 1000),
+            new DifficultyLevel("Test Your Mettle", 750),
+            new DifficultyLevel("No Pain, No Gain", 500),
+            new DifficultyLevel("Insanity Awaits", 250),
         };
 
-        public IntroScene(SceneManager sceneManager, DisplayManager displayManager) : base(sceneManager, displayManager)
+        public IntroScene(Player player, SceneManager sceneManager, DisplayManager displayManager) : base(player, sceneManager, displayManager)
         {
 
         }
@@ -22,11 +22,20 @@ namespace Inventory_Management_Project.Scenes
         {
             base.Draw();
 
-            _displayManager.DisplayMessage("Welcome to Kiu's Emporium!");
+            _displayManager.DisplayMessage("What should I call you?");
 
-            var selectedDifficulty = _displayManager.GetMenuOptionFromPlayer("Please select a difficulty", difficulties);
+            var playerName = _displayManager.GetInputFromPlayer();
 
+            _player.AssignName(playerName?.Trim() ?? "Unknown");
+
+            _displayManager.DisplayEmptyLine();
+
+            var selectedDifficulty = _displayManager.GetMenuOptionFromPlayer($"How challenging would you like your adventure, {_player.Name}?", difficulties);
+
+            _displayManager.DisplayEmptyLine();
             _displayManager.DisplayInfo($"You chose the {selectedDifficulty.Label} difficulty. You'll start with {selectedDifficulty.StartingGold} GP");
+
+            _player.AddGold(selectedDifficulty.StartingGold);
 
             _displayManager.WaitForAnyInputFromPlayer(true);
 

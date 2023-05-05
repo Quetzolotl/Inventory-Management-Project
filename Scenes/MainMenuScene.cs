@@ -12,7 +12,7 @@ namespace Inventory_Management_Project.Scenes
             new SceneMenuOption("Shop", typeof(ShopMainScene))
         };
 
-        public MainMenuScene(SceneManager sceneManager, DisplayManager displayManager) : base(sceneManager, displayManager)
+        public MainMenuScene(Player player, SceneManager sceneManager, DisplayManager displayManager) : base(player, sceneManager, displayManager)
         {
 
         }

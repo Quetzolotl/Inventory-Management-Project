@@ -18,7 +18,7 @@ namespace Inventory_Management_Project.Scenes.Shop
             new SceneMenuOption("Exit", typeof(MainMenuScene)),
         };
 
-        public ShopMainScene(SceneManager sceneManager, DisplayManager displayManager) : base(sceneManager, displayManager)
+        public ShopMainScene(Player player, SceneManager sceneManager, DisplayManager displayManager) : base(player, sceneManager, displayManager)
         {
 
         }
@@ -27,7 +27,7 @@ namespace Inventory_Management_Project.Scenes.Shop
         {
             base.Draw();
 
-            var selectedOption = _displayManager.GetMenuOptionFromPlayer("Welcome, friend! What can I do for you?", _menuOptions);
+            var selectedOption = _displayManager.GetMenuOptionFromPlayer("Welcome to Kiu's Emporium, friend! What can I do for you?", _menuOptions);
 
             _sceneManager.ChangeScene(selectedOption.SceneType);
         }

@@ -9,6 +9,11 @@ namespace Inventory_Management_Project.Core
             Console.Clear();
         }
 
+        public void DisplayEmptyLine()
+        {
+            Console.WriteLine();
+        }
+
         public void DisplayMessage(string message, bool hasNewLine = true)
         {
             DisplayMessage(message, hasNewLine, ConsoleColor.Gray);
@@ -109,6 +114,7 @@ namespace Inventory_Management_Project.Core
         public TOption GetMenuOptionFromPlayer<TOption>(string menuTitle, IEnumerable<TOption> menuOptions) where TOption : IMenuOption
         {
             DisplayMessage(menuTitle);
+            DisplayEmptyLine();
 
             var optionId = 0;
             var validOptions = new Dictionary<string, TOption>();
@@ -120,6 +126,8 @@ namespace Inventory_Management_Project.Core
 
                 DisplayMessage($"{optionId}: {menuOption.Label}");
             }
+
+            DisplayEmptyLine();
 
             var playerInput = GetValidInputFromPlayer(validOptions.Keys, true, "{0} is not a valid menu option. Please select another");
 
