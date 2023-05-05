@@ -8,41 +8,33 @@ namespace Inventory_Management_Project.Scenes
 {
     public sealed class SceneManager
     {
-        public event Action? OnExitGameRequest;
-
         private Scene? _currentScene;
 
-        public void ChangeScene<TScene>()
+        public void ChangeScene(Type sceneType)
         {
-            if (_currentScene != null)
+            if (!_scenes.TryGetValue(sceneType, out var newScene))
             {
-                _currentScene.OnExitGameRequest -= OnExitGameRequested;
-            }
-
-            if (!_scenes.TryGetValue(typeof(TScene), out var newScene))
-            {
-                throw new ArgumentException($"A scene of type {typeof(TScene)} was not found in the Scene Manager");
+                throw new ArgumentException($"A scene of type {sceneType} was not found in the Scene Manager");
             }
 
             if (newScene == null)
             {
-                throw new Exception($"A scene of type {typeof(TScene)} was found in the Scene Manager but it was null");
+                throw new Exception($"A scene of type {sceneType} was found in the Scene Manager but it was null");
             }
 
             _currentScene = newScene;
-            _currentScene.OnExitGameRequest += OnExitGameRequested;
 
             _currentScene.Draw();
+        }
+
+        public void ChangeScene<TScene>()
+        {
+            ChangeScene(typeof(TScene));
         }
 
         public void DrawCurrentScene()
         {
             _currentScene?.Draw();
-        }
-
-        private void OnExitGameRequested()
-        {
-            OnExitGameRequest?.Invoke();
         }
 
         private readonly Dictionary<Type, Scene> _scenes = new Dictionary<Type, Scene>();

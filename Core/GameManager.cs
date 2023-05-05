@@ -20,7 +20,6 @@ namespace Inventory_Management_Project.Core
             _displayManager = displayManager;
             _serviceProvider = serviceProvider;
 
-            _sceneManager.OnExitGameRequest += OnExitGameRequested;
             InitializeScenes();
         }
 

@@ -12,8 +12,6 @@ namespace Inventory_Management_Project.Scenes
         protected readonly SceneManager _sceneManager;
         protected readonly DisplayManager _displayManager;
 
-        public event Action? OnExitGameRequest;
-
         public Scene(SceneManager sceneManager, DisplayManager displayManager)
         {
             _sceneManager = sceneManager;
