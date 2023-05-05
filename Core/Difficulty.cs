@@ -7,14 +7,22 @@ using Inventory_Management_Project.Core.Menus;
 
 namespace Inventory_Management_Project.Core
 {
-    public struct DifficultyLevel : IMenuOption
+    public struct Difficulty
     {
-        public string Label { get; }
+        public enum DifficultyLevel
+        {
+            Easy,
+            Medium,
+            Hard,
+            Extreme
+        }
+
+        public DifficultyLevel Level { get; }
         public int StartingGold { get; }
 
-        public DifficultyLevel(string label, int startingGold)
+        public Difficulty(DifficultyLevel level, int startingGold)
         {
-            Label = label;
+            Level = level;
             StartingGold = startingGold;
         }
     }

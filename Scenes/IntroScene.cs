@@ -1,16 +1,17 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Menus;
 using System.Linq;
 
 namespace Inventory_Management_Project.Scenes
 {
     public sealed class IntroScene : Scene
     {
-        private readonly List<DifficultyLevel> difficulties = new List<DifficultyLevel>
+        private readonly List<GenericDataMenuOption<Difficulty>> difficulties = new List<GenericDataMenuOption<Difficulty>>
         {
-            new DifficultyLevel("Easy Peasy ", 1000),
-            new DifficultyLevel("Test Your Mettle", 750),
-            new DifficultyLevel("No Pain, No Gain", 500),
-            new DifficultyLevel("Insanity Awaits", 250),
+            new GenericDataMenuOption<Difficulty>("Easy Peasy", new Difficulty(Difficulty.DifficultyLevel.Easy, 1000)),
+            new GenericDataMenuOption<Difficulty>("Test Your Mettle", new Difficulty(Difficulty.DifficultyLevel.Easy, 750)),
+            new GenericDataMenuOption<Difficulty>("No Pain, No Gain", new Difficulty(Difficulty.DifficultyLevel.Easy, 500)),
+            new GenericDataMenuOption<Difficulty>("Insanity Awaits", new Difficulty(Difficulty.DifficultyLevel.Easy, 250)),
         };
 
         public IntroScene(Player player, SceneManager sceneManager, DisplayManager displayManager) : base(player, sceneManager, displayManager)
@@ -30,12 +31,12 @@ namespace Inventory_Management_Project.Scenes
 
             _displayManager.DisplayEmptyLine();
 
-            var selectedDifficulty = _displayManager.GetMenuOptionFromPlayer($"How challenging would you like your adventure, {_player.Name}?", difficulties);
+            var selectedOption = _displayManager.GetMenuOptionFromPlayer($"How challenging would you like your adventure, {_player.Name}?", difficulties);
 
             _displayManager.DisplayEmptyLine();
-            _displayManager.DisplayInfo($"You chose the {selectedDifficulty.Label} difficulty. You'll start with {selectedDifficulty.StartingGold} GP");
+            _displayManager.DisplayInfo($"You chose the {selectedOption.Label} difficulty. You'll start with {selectedOption.Data.StartingGold} GP");
 
-            _player.AddGold(selectedDifficulty.StartingGold);
+            _player.SetDifficulty(selectedOption.Data);
 
             _displayManager.WaitForAnyInputFromPlayer();
 

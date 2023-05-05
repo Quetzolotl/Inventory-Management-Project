@@ -8,7 +8,14 @@ namespace Inventory_Management_Project.Core
 {
     public sealed class Player : Character
     {
+        public Difficulty Difficulty { get; private set; }
         public int Gold { get; private set; }
+
+        public void SetDifficulty(Difficulty difficulty)
+        {
+            Difficulty = difficulty;
+            AddGold(difficulty.StartingGold);
+        }
 
         public void AddGold(int amount)
         {
