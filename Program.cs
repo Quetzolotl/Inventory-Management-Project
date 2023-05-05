@@ -25,7 +25,10 @@ namespace Inventory_Management_Project
             // Core
             serviceCollection.AddSingleton<GameManager>();
             serviceCollection.AddSingleton<SceneManager>();
-            serviceCollection.AddSingleton<DisplayManager>();
+
+            serviceCollection.AddTransient<DisplayManager>();
+            serviceCollection.AddTransient<IDataService, FileSystemDataService>();
+
             serviceCollection.AddSingleton<Player>();
 
             // Scenes - This should also be registered in the Game Manager
