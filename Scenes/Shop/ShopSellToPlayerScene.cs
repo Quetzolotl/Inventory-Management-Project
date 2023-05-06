@@ -73,6 +73,7 @@ namespace Inventory_Management_Project.Scenes.Shop
                         {
                             _player.RemoveGold(selectedWeapon.Price);
                             _shop.RemoveWeapon(selectedWeapon);
+                            _player.AddItem(selectedWeapon);
 
                             _displayManager.DisplayInfo($"A {selectedWeapon.Name} was added to your inventory and {selectedWeapon.Price} has been removed from your gold. You have {_player.Gold}gp left");
                         }
