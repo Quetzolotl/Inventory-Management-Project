@@ -40,6 +40,8 @@ namespace Inventory_Management_Project
             serviceCollection.AddSingleton<MainMenuScene>();
             serviceCollection.AddSingleton<ShopMainScene>();
             serviceCollection.AddSingleton<ShopSellToPlayerScene>();
+            serviceCollection.AddSingleton<InventoryScene>();
+
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 

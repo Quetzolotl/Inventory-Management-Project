@@ -51,6 +51,7 @@ namespace Inventory_Management_Project.Core.Managers
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<MainMenuScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopMainScene>());
             _sceneManager.AddScene(_serviceProvider.GetRequiredService<ShopSellToPlayerScene>());
+            _sceneManager.AddScene(_serviceProvider.GetRequiredService<InventoryScene>());
         }
     }
 }
