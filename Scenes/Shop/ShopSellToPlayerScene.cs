@@ -44,7 +44,7 @@ namespace Inventory_Management_Project.Scenes.Shop
                     _backSceneMenuOption
                 };
 
-                var selectedOption = _displayManager.GetMenuOptionFromPlayer("What weapon would you like to look at?", allMenuOptions);
+                var selectedOption = _displayManager.GetMenuOptionFromPlayer($"You have {_player.Gold}gp. What weapon would you like to look at?", allMenuOptions);
 
                 if (selectedOption is SceneMenuOption selectedSceneOption)
                 {
