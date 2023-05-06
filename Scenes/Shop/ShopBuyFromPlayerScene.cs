@@ -40,7 +40,7 @@ namespace Inventory_Management_Project.Scenes.Shop
                     return;
                 }
 
-                var weaponMenuOptions = allPlayersWeapons.ToGenericDataMenuOptions(w => $"{w.Name} ({w.Price}gp)");
+                var weaponMenuOptions = allPlayersWeapons.ToGenericDataMenuOptions(w => $"{w.Name} ({_shop.GetAdjustedPrice(w.Price, _player.Difficulty, WeaponShop.Action.Buy)}gp)");
                 var allMenuOptions = new List<IMenuOption>(weaponMenuOptions.Cast<IMenuOption>())
                 {
                     _backSceneMenuOption
@@ -56,20 +56,21 @@ namespace Inventory_Management_Project.Scenes.Shop
                 else if (selectedOption is GenericDataMenuOption<Weapon> selectedWeaponOption)
                 {
                     var selectedWeapon = selectedWeaponOption.Data;
+                    var adjustedWeaponPrice = _shop.GetAdjustedPrice(selectedWeapon.Price, _player.Difficulty, WeaponShop.Action.Buy);
 
                     _displayManager.Clear();
 
-                    var shouldSellWeapon = _displayManager.GetYesNoFromPlayer($"Are you sure you would like to sell your {selectedWeapon.Name} for {selectedWeapon.Price}gp?");
+                    var shouldSellWeapon = _displayManager.GetYesNoFromPlayer($"Are you sure you would like to sell your {selectedWeapon.Name} for {adjustedWeaponPrice}gp?");
 
                     _displayManager.DisplayEmptyLine();
 
                     if (shouldSellWeapon)
                     {
-                        _player.AddGold(selectedWeapon.Price);
+                        _player.AddGold(adjustedWeaponPrice);
                         _player.RemoveItem(selectedWeapon);
                         _shop.AddWeapon(selectedWeapon);
 
-                        _displayManager.DisplayInfo($"A {selectedWeapon.Name} was removed to your inventory and {selectedWeapon.Price} has been added to your gold. You now have {_player.Gold}gp");
+                        _displayManager.DisplayInfo($"A {selectedWeapon.Name} was removed to your inventory and {adjustedWeaponPrice}gp has been added to your gold. You now have {_player.Gold}gp");
 
                         _displayManager.WaitForAnyInputFromPlayer();
                     }

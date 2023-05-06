@@ -38,7 +38,7 @@ namespace Inventory_Management_Project.Scenes.Shop
                     return;
                 }
 
-                var weaponMenuOptions = _shop.Weapons.ToGenericDataMenuOptions(w => $"{w.Name} ({w.Price}gp)");
+                var weaponMenuOptions = _shop.Weapons.ToGenericDataMenuOptions(w => $"{w.Name} ({_shop.GetAdjustedPrice(w.Price, _player.Difficulty, WeaponShop.Action.Sell)}gp)");
                 var allMenuOptions = new List<IMenuOption>(weaponMenuOptions.Cast<IMenuOption>())
                 {
                     _backSceneMenuOption
@@ -54,6 +54,7 @@ namespace Inventory_Management_Project.Scenes.Shop
                 else if (selectedOption is GenericDataMenuOption<Weapon> selectedWeaponOption)
                 {
                     var selectedWeapon = selectedWeaponOption.Data;
+                    var adjustedWeaponPrice = _shop.GetAdjustedPrice(selectedWeapon.Price, _player.Difficulty, WeaponShop.Action.Sell);
 
                     _displayManager.Clear();
 
@@ -63,19 +64,19 @@ namespace Inventory_Management_Project.Scenes.Shop
 
                     _displayManager.DisplayEmptyLine();
                     
-                    var shouldBuyWeapon = _displayManager.GetYesNoFromPlayer($"Would you like to buy it for {selectedWeapon.Price}gp (you have {_player.Gold}gp)?");
+                    var shouldBuyWeapon = _displayManager.GetYesNoFromPlayer($"Would you like to buy it for {adjustedWeaponPrice}gp (you have {_player.Gold}gp)?");
 
                     _displayManager.DisplayEmptyLine();
 
                     if (shouldBuyWeapon)
                     {
-                        if (_player.Gold >= selectedWeapon.Price)
+                        if (_player.Gold >= adjustedWeaponPrice)
                         {
-                            _player.RemoveGold(selectedWeapon.Price);
+                            _player.RemoveGold(adjustedWeaponPrice);
                             _shop.RemoveWeapon(selectedWeapon);
                             _player.AddItem(selectedWeapon);
 
-                            _displayManager.DisplayInfo($"A {selectedWeapon.Name} was added to your inventory and {selectedWeapon.Price} has been removed from your gold. You have {_player.Gold}gp left");
+                            _displayManager.DisplayInfo($"A {selectedWeapon.Name} was added to your inventory and {adjustedWeaponPrice}gp has been removed from your gold. You have {_player.Gold}gp left");
                         }
                         else
                         {
