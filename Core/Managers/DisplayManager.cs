@@ -79,9 +79,35 @@ namespace Inventory_Management_Project.Core.Managers
             return userInput.Data;
         }
 
-        public string? GetInputFromPlayer()
+        public string? GetInputFromPlayer(bool allowEmptyInput = false, string emptyInputMessage = "")
         {
-            return Console.ReadLine();
+            var hasValidInput = false;
+            var input = string.Empty;
+
+            do
+            {
+                input = Console.ReadLine();
+
+                if (!allowEmptyInput && string.IsNullOrWhiteSpace(input?.Trim()))
+                {
+                    if (string.IsNullOrWhiteSpace(emptyInputMessage))
+                    {
+                        emptyInputMessage = "You must provide a value";
+                    }
+                    else if (emptyInputMessage.Contains("{0}"))
+                    {
+                        emptyInputMessage = string.Format(emptyInputMessage, input);
+                    }
+
+                    DisplayError(emptyInputMessage);
+                }
+                else
+                {
+                    hasValidInput = true;
+                }
+            } while (!hasValidInput);
+
+            return input;
         }
 
         public string GetValidInputFromPlayer(IEnumerable<string> validInputs, bool shouldNormalize = true, string invalidInputMessage = "")
