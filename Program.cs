@@ -1,6 +1,7 @@
 ﻿
 using Inventory_Management_Project.Core;
 using Inventory_Management_Project.Core.Managers;
+using Inventory_Management_Project.Core.Shops;
 using Inventory_Management_Project.Scenes;
 using Inventory_Management_Project.Scenes.Shop;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +27,12 @@ namespace Inventory_Management_Project
             // Core
             serviceCollection.AddSingleton<GameManager>();
             serviceCollection.AddSingleton<SceneManager>();
-
             serviceCollection.AddTransient<DisplayManager>();
             serviceCollection.AddTransient<IDataManager, FileSystemDataManager>();
 
             serviceCollection.AddSingleton<Player>();
+
+            serviceCollection.AddSingleton<WeaponShop>();
 
             // Scenes - This should also be registered in the Game Manager
             serviceCollection.AddSingleton<ExitGameScene>();

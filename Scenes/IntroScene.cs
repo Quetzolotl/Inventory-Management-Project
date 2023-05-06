@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Project.Core;
+using Inventory_Management_Project.Core.Extensions;
 using Inventory_Management_Project.Core.Managers;
 using Inventory_Management_Project.Core.Menus;
 using System.Linq;
@@ -11,11 +12,9 @@ namespace Inventory_Management_Project.Scenes
 
         public IntroScene(Player player, SceneManager sceneManager, DisplayManager displayManager, IDataManager dataService) : base(player, sceneManager, displayManager)
         {
-            var difficulties = dataService.LoadData<IEnumerable<Difficulty>>("difficulties");
+            var difficulties = dataService.LoadData<IEnumerable<Difficulty>>("difficulties") ?? new List<Difficulty>();
 
-            difficulties ??= new List<Difficulty>();
-
-            _difficultyMenuOptions = difficulties.Select(d => new GenericDataMenuOption<Difficulty>(d.DisplayName, d));
+            _difficultyMenuOptions = difficulties.ToGenericDataMenuOptions(d => d.DisplayName);
         }
 
         public override void Draw()
@@ -32,10 +31,10 @@ namespace Inventory_Management_Project.Scenes
 
             var selectedOption = _displayManager.GetMenuOptionFromPlayer($"How challenging would you like your adventure, {_player.Name}?", _difficultyMenuOptions);
 
-            _displayManager.DisplayEmptyLine();
-            _displayManager.DisplayInfo($"You chose the {selectedOption.Label} difficulty. You'll start with {selectedOption.Data.StartingGold} GP");
-
             _player.SetDifficulty(selectedOption.Data);
+
+            _displayManager.DisplayEmptyLine();
+            _displayManager.DisplayInfo($"You chose the {selectedOption.Label} difficulty. You'll start with {_player.Gold}gp");
 
             _displayManager.WaitForAnyInputFromPlayer();
 

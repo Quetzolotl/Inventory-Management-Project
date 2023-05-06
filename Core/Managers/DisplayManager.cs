@@ -4,6 +4,12 @@ namespace Inventory_Management_Project.Core.Managers
 {
     public sealed class DisplayManager
     {
+        private readonly IEnumerable<GenericDataMenuOption<bool>> _yesNoMenuOptions = new List<GenericDataMenuOption<bool>>
+        {
+            new GenericDataMenuOption<bool>("Yes", true),
+            new GenericDataMenuOption<bool>("No", false)
+        };
+
         public void Clear()
         {
             Console.Clear();
@@ -64,6 +70,13 @@ namespace Inventory_Management_Project.Core.Managers
             }
 
             Console.ReadKey();
+        }
+
+        public bool GetYesNoFromPlayer(string message)
+        {
+            var userInput = GetMenuOptionFromPlayer(message, _yesNoMenuOptions);
+
+            return userInput.Data;
         }
 
         public string? GetInputFromPlayer()
@@ -142,6 +155,11 @@ namespace Inventory_Management_Project.Core.Managers
             var playerInput = GetMenuOptionFromPlayer(menuTitle, options);
 
             return playerInput.Label;
+        }
+
+        internal void DisplayMessage(object description)
+        {
+            throw new NotImplementedException();
         }
     }
 }

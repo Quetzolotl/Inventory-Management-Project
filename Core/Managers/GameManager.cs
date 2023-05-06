@@ -34,9 +34,9 @@ namespace Inventory_Management_Project.Core.Managers
             {
                 _displayManager.DisplayError($"There was an unexpected problem. {ex.Message}");
 
-                var playerInput = _displayManager.GetMenuOptionFromPlayer("Would you like more info?", new[] { "Yes", "No" });
+                var shouldShowMoreInfo = _displayManager.GetYesNoFromPlayer("Would you like more info?");
 
-                if (playerInput == "Yes")
+                if (shouldShowMoreInfo)
                 {
                     _displayManager.DisplayError(ex.StackTrace ?? "No additional info");
                     _displayManager.WaitForAnyInputFromPlayer();
