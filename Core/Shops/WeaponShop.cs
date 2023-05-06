@@ -23,5 +23,10 @@ namespace Inventory_Management_Project.Core.Shops
         {
             _weapons.Remove(weapon);
         }
+
+        internal void AddWeapon(Weapon selectedWeapon)
+        {
+            _weapons.Add(selectedWeapon);
+        }
     }
 }

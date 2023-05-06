@@ -16,6 +16,7 @@ namespace Inventory_Management_Project.Scenes.Shop
         private readonly List<SceneMenuOption> _menuOptions = new List<SceneMenuOption>()
         {
             new SceneMenuOption("Buy", typeof(ShopSellToPlayerScene)),
+            new SceneMenuOption("Sell", typeof(ShopBuyFromPlayerScene)),
             new SceneMenuOption("Exit Shop", typeof(MainMenuScene)),
         };
 
