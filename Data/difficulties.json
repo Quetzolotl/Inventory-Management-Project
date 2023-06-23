@@ -1,0 +1,22 @@
+[
+  {
+    "level": "Easy",
+    "displayName": "Easy Peasy",
+    "startingGold": 1000
+  },
+  {
+    "level": "Medium",
+    "displayName": "Test Your Mettle",
+    "startingGold": 750
+  },
+  {
+    "level": "Hard",
+    "displayName": "No Pain, No Gain",
+    "startingGold": 500
+  },
+  {
+    "level": "Extreme",
+    "displayName": "Insanity Awaits",
+    "startingGold": 250
+  }
+]
