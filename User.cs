@@ -7,23 +7,15 @@ using System.Threading.Tasks;
 namespace Inventory_Management_Project
 {
     public class User
-
     {
-        public int Gold { get; set; }
-        public Weapon? Weapon { get; set; } 
+        // Made setters private to avoid other outside the class from setting it
+        public int Gold { get; private set; }
+        public Weapon? Weapon { get; private set; } 
 
         public User(int gold,  Weapon? weapon)
         {
             Gold = gold;
             Weapon = weapon;
-        }
-
-        public void BuyWeapon(Weapon weapon, int gold)
-        {
-            RemoveMoney(gold);
-            Weapon = weapon;
-
-            Console.WriteLine($"You now have {Gold} gold pieces");
         }
 
         public void AddMoney(int gold)
@@ -33,16 +25,18 @@ namespace Inventory_Management_Project
 
         public void RemoveMoney(int gold)
         {
-            if (gold > 0)
-            {
-                Gold -= gold;
-            }
-        }
+            // Throw an exception if they pass in an invalid amount instead of just not doing anything
+            // These could be added to other methods but I only did this once since it was the only one
+            // with existing checks
+            if (gold < 0) throw new ArgumentException("Cannot remove negative gold", nameof(gold));
 
-        public void RemoveWeapon(Weapon weapon)
-        {
-            Weapon = null;
-            
+            Gold -= gold;
+
+            // Add protection to keep from going below zero gold
+            if (Gold < 0)
+            {
+                Gold = 0;
+            }
         }
     }
 }

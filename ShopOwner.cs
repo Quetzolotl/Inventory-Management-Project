@@ -8,133 +8,143 @@ using Inventory_Management_Project;
 
 namespace Inventory_Management_Project
 {
-
     public class ShopOwner : User
     {
-        private static Weapon? weapon;
-        string[] lines = File.ReadAllLines("Data/weapons.txt");
+        // Changed the name since it can only hold Weapons
+        private readonly List<Weapon> weapons = new List<Weapon>();
 
-        List<Weapon> items = new List<Weapon>();
-
-
-        public ShopOwner(int gold, Weapon weapon) : base(gold, weapon)
+        public ShopOwner(int gold, Weapon? weapon) : base(gold, weapon)
         {
-            if (items.Count == 0)
+            // Could be replaced with a json file instead and simplify all of this
+            // In practice, CSV can be very complicated to parse and map
+            var weaponTextLines = File.ReadAllLines("Data/weapons.txt");
+
+            // If this is in the constructor, when would weapons.Count ever be > 0?
+            if (weapons.Count == 0)
             {
-
-
-                foreach (string line in lines)
+                foreach (var weaponTextLine in weaponTextLines)
                 {
+                    var fields = weaponTextLine.Split(',');
+                    var name = "Unknown";
+                    var price = 0;
+                    var quantity = 0;
+                    var level = 0;
 
-                    string[] fields = line.Split(',');
-                    string name = fields[0];
-                    int price = int.Parse(fields[1]);
-                    int quantity = int.Parse(fields[2]);
-                    int level = int.Parse(fields[3]);
-                    items.Add(new Weapon(name, price, quantity, level));
+                    // Need to check if there are actually enough fields to access
+                    if (fields.Length > 0)
+                    {
+                        name = fields[0];
+                    }
 
+                    if (fields.Length > 1)
+                    {
+                        // Make sure the field is actually a int value
+                        // It will default to 0 from above
+                        int.TryParse(fields[1], out price);
+                    }
+
+                    if (fields.Length > 2)
+                    {
+                        int.TryParse(fields[2], out quantity);
+                    }
+
+                    if (fields.Length > 3)
+                    {
+                        int.TryParse(fields[3], out level);
+                    }
+
+                    weapons.Add(new Weapon(name, price, quantity, level));
                 }
             }
         }
 
-        public void OpenShop(User user)
+        public void SellWeaponToUser(User user)
         {
-            //items.Clear();
+            // This whole method should probably be reworked to loop back to the Shop if they decline or don't have enough money
+            // Right now, they select No or they don't have enough money, it kicks them back to the main menu.
+            // It should just kick them back to the item list
 
             Console.WriteLine("Have a look at my wares.");
 
-
-                for (int i = 0; i < items.Count; i++)
-                {
-                    Console.WriteLine($"{i}: {items[i].Name}");
-                }
-
-              
-                Console.WriteLine("\r\nDoes anything catch your eye? Type their respective item number to select the item and it's information, otherwise, type 'Back'");
-
-                bool closeShop = false;
-
-                string? inShop = Console.ReadLine().Trim();
-                inShop = char.ToUpper(inShop[0]) + inShop[1..];
-
-
-            Console.WriteLine($"<---------------------first call: User typed: {inShop}");
-
-
-            if (int.TryParse(inShop, out int itemSelect) && inShop != "Back")
+            for (int i = 0; i < weapons.Count; i++)
             {
-                while (!closeShop)
+                Console.WriteLine($"{i}: {weapons[i].Name}");
+            }
+
+            Console.WriteLine($"{Environment.NewLine}Does anything catch your eye? Type their respective item number to select the item and it's information, otherwise, type 'Back'");
+
+
+            var userInput = Console.ReadLine()?.Trim() ?? string.Empty;
+            userInput = userInput.ToLower();
+
+            if (userInput == "back") // Check the most specific first, then work towards more generic
+            {
+                BidFarewellToUser();
+            }
+            else if (int.TryParse(userInput, out int selectedItemIndex) && weapons.Count > selectedItemIndex) // Make sure it's valid and in range
+            {
+                var shouldCloseShop = false; // Move these to be next to where they are used (or at least in the same "scope")
+                while (!shouldCloseShop)
                 {
+                    var weapon = weapons[selectedItemIndex]; // Cache it so you don't have to keep accessing the array
 
-                    Console.WriteLine($"Ah! you have a good eye! {items[itemSelect].Name} is a beautiful blade.\r\nI've got {items[itemSelect].Quantity} in stock, and it's yours for the price of {items[itemSelect].Price} gold pieces.");
-                    Console.WriteLine("Does it suit your fancy?");
+                    Console.WriteLine($"Ah! you have a good eye! {weapon.Name} is a beautiful blade.{Environment.NewLine}I've got {weapon.Quantity} in stock, and it's yours for the price of {weapon.Price} gold pieces.");
+                    Console.WriteLine("Does it suit your fancy? Yes or No"); // Added options
 
-                    string? userBuys = Console.ReadLine().Trim();
-                    userBuys = char.ToUpper(userBuys[0]) + userBuys.Substring(1);
+                    var userBuys = Console.ReadLine()?.Trim() ?? string.Empty;
+                    userBuys = userBuys.ToLower();
 
-
-                    if (userBuys == "Yes")
+                    if (userBuys == "yes")
                     {
-
-                        Weapon selectedItem = items[itemSelect];
-
-                        if (items[itemSelect].Price > user.Gold)
+                        if (weapon.Price > user.Gold)
                         {
                             Console.WriteLine("Sorry, friend. You don't have enough coin. I have other weapons that you could look at.");
-
                         }
                         else
                         {
-                            user.RemoveMoney(items[itemSelect].Price);
+                            user.RemoveMoney(weapon.Price);
 
-                            if (items[itemSelect].Quantity > 0)
+                            if (weapon.Quantity > 0)
                             {
-                                items[itemSelect].Quantity--;
-                                Console.WriteLine($"<------------------item: {items[itemSelect].Name} and left: {items[itemSelect].Quantity}------->");
+                                weapon.Quantity--; // Why is this being accessed directly but the user gold is set via a method?
+                                Console.WriteLine($"<------------------item: {weapon.Name} and left: {weapon.Quantity}------->");
                                 Console.WriteLine($"Take good care of it! You now have {user.Gold} gold pieces.");
                             }
 
-                            if (items[itemSelect].Quantity <= 0)
+                            if (weapon.Quantity <= 0)
                             {
-                                items.RemoveAt(itemSelect);
+                                weapons.Remove(weapon);
                             }
 
-                            closeShop = true;
+                            shouldCloseShop = true;
 
-                            Farewell();
-
+                            BidFarewellToUser();
                         }
+                    }
+                    else // This fixes the infinite loop if they decline the purhcase
+                    {
+                        shouldCloseShop = true;
                     }
                 }
             }
-
-            else if (inShop == "Back")
-            {
-
-                Console.WriteLine($" <-----------------------------> user typed back: {inShop}");
-                Farewell();
-            }
-
             else
             {
                 Console.WriteLine("Sorry, I don't have that in stock.");
             }
-
-            
-            
         }
 
-        public void Farewell()
+        public void BidFarewellToUser()
         {
             Console.WriteLine("Farewell!");
         }
 
-        internal void OpenQuests()
+        internal void DisplayQuests()
         {
+            // Why are these throwing an exception when the OpenMainMenu and OpenInventory methods in Program are just empty?
             throw new NotImplementedException();
         }
 
-        internal void SellWeapon()
+        internal void BuyWeaponFromUser()
         {
             throw new NotImplementedException();
         }
